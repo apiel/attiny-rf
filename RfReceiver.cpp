@@ -130,8 +130,6 @@ void RfReceiver::_checkForResult(unsigned int duration) {
     if (_currentProtocole > -1 && _timingsPos > 0 && (_timingsPos >= RF_MAX_CHANGES || _isLatch(duration))) {
         int pos = _timingsPos/RF_BIN_SPLIT;
         if (pos > 4) { // at least for char result
-            Serial.print("yoyo: ");
-            Serial.println(_resultFound);
             strcpy(_resultFound, _result);
             _resultFound[pos++] = '-';
             _resultFound[pos++] = '0' + _currentProtocole;
@@ -139,8 +137,8 @@ void RfReceiver::_checkForResult(unsigned int duration) {
             // printf("proto: %d resres: %s\n", _currentProtocole, _result);
             // _callback(_result);
             _available = true;
-            Serial.print("foundcode: ");
-            Serial.println(_resultFound);
+            // Serial.print("foundcode: ");
+            // Serial.println(_resultFound);
             _currentProtocole = -1;
         }
     }
@@ -148,8 +146,6 @@ void RfReceiver::_checkForResult(unsigned int duration) {
 
 char * RfReceiver::getResult() {
     _available = false;
-    Serial.print("getResult: ");
-    Serial.println(_resultFound);
     return _resultFound;
 }
 
