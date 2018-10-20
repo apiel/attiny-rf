@@ -26,6 +26,7 @@ struct RfProtocol {
 // 78690 could be second latch but doesnt fit in 65535
 static const RfProtocol protocoles[] = {
     {"remote", { 7500, 8100 }, { 0, 0 }, { 180, 360 }, { 630, 820 }},
+    // {"button", { 10000, 12000 }, { 0, 0 }, { 570, 850 }, { 900, 1400 }}, // nope, not working
     // {"cercle", { 10000, 15000 }, { 0, 0 }, { 200, 400 }, { 500, 700 }},
 };
 
@@ -34,8 +35,6 @@ class RfReceiver
     public:
         RfReceiver();
         void onInterrupt();
-        char * getResult();
-        bool isAvailable();
 
     protected:
         void (*_callback)(char * result);
@@ -44,9 +43,7 @@ class RfReceiver
         unsigned int _timingsPos;
         unsigned long _lastTime = 0;
         unsigned int _falseTimingCount = 0;
-        bool _available = false;
         char _result[RF_RESULT_SIZE + 2];
-        char _resultFound[RF_RESULT_SIZE + 2]; // might find a better way than to copy the result
         void _setMainLatch();
         void _attachInterrupt(int pin);
         void _initCurrentProtocole(unsigned int duration);

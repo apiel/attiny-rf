@@ -18,10 +18,6 @@ void setup() {
   Serial.println("Start receiving");
 
   pinMode(pinReceive, INPUT);
-  // rfReceiver.init([](char * result){
-  //   Serial.print("callback: ");
-  //   Serial.println(result);
-  // });
 }
 
 void loop() {
@@ -30,9 +26,5 @@ void loop() {
   if (pinValue != lastPinValue) {
     lastPinValue = pinValue;
     rfReceiver.onInterrupt();
-  }
-  if (rfReceiver.isAvailable()) {
-    result = rfReceiver.getResult();
-    Serial.println(result);
   }
 }

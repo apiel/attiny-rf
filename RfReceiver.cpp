@@ -41,6 +41,8 @@ void RfReceiver::_setMainLatch() { // we could easily write unit test there
 void RfReceiver::onInterrupt() {
     long time = micros();
     unsigned int duration = time - _lastTime;
+
+    // if (duration > 8000) Serial.println(duration);
     // Serial.println(duration);
     // printf(",%d", duration);
     if (duration > _mainLatch.min && duration < _mainLatch.max) {
@@ -103,27 +105,14 @@ bool RfReceiver::_isOne(unsigned int duration) {
 }
 
 void RfReceiver::_checkForResult(unsigned int duration) {
-    _available = false;
     if (_currentProtocole > -1 && _timingsPos > 0 && (_timingsPos >= RF_MAX_CHANGES || _isLatch(duration))) {
         int pos = _timingsPos/RF_BIN_SPLIT;
         if (pos > 4) { // at least for char result
-            strcpy(_resultFound, _result);
-            _resultFound[pos++] = '-';
-            _resultFound[pos++] = '0' + _currentProtocole;
-            _resultFound[pos++] = '\0';
-            _available = true;
-            // Serial.print("foundcode: ");
-            // Serial.println(_resultFound);
+            _result[pos++] = '-';
+            _result[pos++] = '0' + _currentProtocole;
+            _result[pos++] = '\0';
+            Serial.println(_result);
             _currentProtocole = -1;
         }
     }
-}
-
-char * RfReceiver::getResult() {
-    _available = false;
-    return _resultFound;
-}
-
-bool RfReceiver::isAvailable() {
-    return _available;
 }
