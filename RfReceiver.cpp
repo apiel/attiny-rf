@@ -24,29 +24,6 @@ RfReceiver::RfReceiver()
     _setMainLatch();
 }
 
-void handleInterrupt()
-{
-    Serial.print("d: ");
-    rfReceiver.onInterrupt();
-}
-
-void RfReceiver::init(void (*callback)(char * result)) {
-    _callback = callback;
-    _setMainLatch();
-}
-
-void RfReceiver::start(int pin, void (*callback)(char * result)) {
-    init(callback);
-    _attachInterrupt(pin);
-}
-
-void RfReceiver::_attachInterrupt(int pin) {
-    pinMode(pin, INPUT_PULLUP);
-    // Serial.println("_attachInterrupt");
-    // printf("attach interrupt %d\n", pin);
-    attachInterrupt(pin, handleInterrupt, CHANGE);
-}
-
 void RfReceiver::_setMainLatch() { // we could easily write unit test there
     _mainLatch = { 65535, 0 };
     for(unsigned int i = 0; i < numProto; i++) {
@@ -134,8 +111,6 @@ void RfReceiver::_checkForResult(unsigned int duration) {
             _resultFound[pos++] = '-';
             _resultFound[pos++] = '0' + _currentProtocole;
             _resultFound[pos++] = '\0';
-            // printf("proto: %d resres: %s\n", _currentProtocole, _result);
-            // _callback(_result);
             _available = true;
             // Serial.print("foundcode: ");
             // Serial.println(_resultFound);

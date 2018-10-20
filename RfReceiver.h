@@ -32,10 +32,7 @@ static const RfProtocol protocoles[] = {
 class RfReceiver
 {
     public:
-        // RfReceiver(RfProtocol protocoles);
         RfReceiver();
-        void init(void (*callback)(char * result));
-        void start(int pin, void (*callback)(char * result));
         void onInterrupt();
         char * getResult();
         bool isAvailable();
