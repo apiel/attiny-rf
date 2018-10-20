@@ -19,6 +19,11 @@ enum {
 
 RfReceiver rfReceiver = RfReceiver();
 
+RfReceiver::RfReceiver()
+{
+    _setMainLatch();
+}
+
 void handleInterrupt()
 {
     Serial.print("d: ");
@@ -121,17 +126,33 @@ bool RfReceiver::_isOne(unsigned int duration) {
 }
 
 void RfReceiver::_checkForResult(unsigned int duration) {
+    _available = false;
     if (_currentProtocole > -1 && _timingsPos > 0 && (_timingsPos >= RF_MAX_CHANGES || _isLatch(duration))) {
         int pos = _timingsPos/RF_BIN_SPLIT;
         if (pos > 4) { // at least for char result
-            _result[pos++] = '-';
-            _result[pos++] = '0' + _currentProtocole;
-            _result[pos++] = '\0';
+            Serial.print("yoyo: ");
+            Serial.println(_resultFound);
+            strcpy(_resultFound, _result);
+            _resultFound[pos++] = '-';
+            _resultFound[pos++] = '0' + _currentProtocole;
+            _resultFound[pos++] = '\0';
             // printf("proto: %d resres: %s\n", _currentProtocole, _result);
-            _callback(_result);
-            // Serial.print("foundcod: ");
-            // Serial.println(_result);
+            // _callback(_result);
+            _available = true;
+            Serial.print("foundcode: ");
+            Serial.println(_resultFound);
             _currentProtocole = -1;
         }
     }
+}
+
+char * RfReceiver::getResult() {
+    _available = false;
+    Serial.print("getResult: ");
+    Serial.println(_resultFound);
+    return _resultFound;
+}
+
+bool RfReceiver::isAvailable() {
+    return _available;
 }

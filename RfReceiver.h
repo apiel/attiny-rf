@@ -33,9 +33,12 @@ class RfReceiver
 {
     public:
         // RfReceiver(RfProtocol protocoles);
+        RfReceiver();
         void init(void (*callback)(char * result));
         void start(int pin, void (*callback)(char * result));
         void onInterrupt();
+        char * getResult();
+        bool isAvailable();
 
     protected:
         void (*_callback)(char * result);
@@ -44,7 +47,9 @@ class RfReceiver
         unsigned int _timingsPos;
         unsigned long _lastTime = 0;
         unsigned int _falseTimingCount = 0;
+        bool _available = false;
         char _result[RF_RESULT_SIZE + 2];
+        char _resultFound[RF_RESULT_SIZE + 2]; // might find a better way than to copy the result
         void _setMainLatch();
         void _attachInterrupt(int pin);
         void _initCurrentProtocole(unsigned int duration);

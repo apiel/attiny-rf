@@ -18,16 +18,21 @@ void setup() {
   Serial.println("Start receiving");
 
   pinMode(pinReceive, INPUT);
-  rfReceiver.init([](char * result){
-    Serial.print("callback: ");
-    Serial.println(result);
-  });
+  // rfReceiver.init([](char * result){
+  //   Serial.print("callback: ");
+  //   Serial.println(result);
+  // });
 }
 
 void loop() {
+  char * result;
   int pinValue = digitalRead(pinReceive);
   if (pinValue != lastPinValue) {
     lastPinValue = pinValue;
     rfReceiver.onInterrupt();
+  }
+  if (rfReceiver.isAvailable()) {
+    result = rfReceiver.getResult();
+    Serial.println(result);
   }
 }
