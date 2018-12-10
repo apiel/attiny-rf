@@ -42,7 +42,8 @@ void RfReceiver::onInterrupt() {
     long time = micros();
     unsigned int duration = time - _lastTime;
 
-    // if (duration > 8000) Serial.println(duration);
+    // if (duration > 4000) Serial.println(duration);
+    // if (duration > 1000 && duration < 2000) Serial.println(duration);
     // Serial.println(duration);
     // printf(",%d", duration);
     if (duration > _mainLatch.min && duration < _mainLatch.max) {
