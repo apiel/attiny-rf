@@ -26,9 +26,8 @@ struct RfProtocol {
 // 78690 could be second latch but doesnt fit in 65535
 static const RfProtocol protocoles[] = {
     {"remote", { 7500, 8500 }, { 0, 0 }, { 180, 360 }, { 630, 820 }},
-    // {"remote2", { 7000, 8100 }, { 0, 0 }, { 600, 800 }, { 1050, 1350 }},
-    // {"button", { 10000, 12000 }, { 0, 0 }, { 570, 850 }, { 900, 1400 }}, // nope, not working
     {"cercle", { 5000, 5500 }, { 0, 0 }, { 200, 400 }, { 500, 700 }},
+    {"pir", { 12200, 12700 }, { 0, 0 }, { 300, 650 }, { 1100, 1300 }},
 };
 
 class RfReceiver

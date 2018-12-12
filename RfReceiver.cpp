@@ -43,7 +43,7 @@ void RfReceiver::onInterrupt() {
     unsigned int duration = time - _lastTime;
 
     // if (duration > 4000) Serial.println(duration);
-    // if (duration > 1000 && duration < 2000) Serial.println(duration);
+    // if (duration > 100 && duration < 700) Serial.println(duration);
     // Serial.println(duration);
     // printf(",%d", duration);
     if (duration > _mainLatch.min && duration < _mainLatch.max) {
