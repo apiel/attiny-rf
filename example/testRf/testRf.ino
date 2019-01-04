@@ -1,4 +1,5 @@
 // ATTINY85 example
+// digipark default 16.5mhz
 
 #include <SoftSerial.h>
 #include <TinyPinChange.h>

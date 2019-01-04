@@ -42,10 +42,18 @@ void RfReceiver::onInterrupt() {
     long time = micros();
     unsigned int duration = time - _lastTime;
 
+    // static int startLog = 0;
+    // if (duration > 13500 && duration < 14000) startLog++;
+    // if (startLog == 1) Serial.println(duration);
+
     // if (duration > 4000) Serial.println(duration);
     // if (duration > 100 && duration < 700) Serial.println(duration);
     // Serial.println(duration);
     // printf(",%d", duration);
+    // if (_currentProtocole == 3) {
+    //     Serial.println(duration);
+    // }
+
     if (duration > _mainLatch.min && duration < _mainLatch.max) {
         _checkForResult(duration);
         _initCurrentProtocole(duration);
@@ -82,6 +90,7 @@ void RfReceiver::_logTiming(unsigned int duration) {
             _timingsPos++;
         } else {
             _falseTimingCount++;
+            // Serial.println(duration);
             if (_falseTimingCount > RF_MAX_FALSE) {
                 _currentProtocole = -1;
             }
