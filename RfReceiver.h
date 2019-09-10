@@ -25,7 +25,7 @@ struct RfProtocol {
 
 // 78690 could be second latch but doesnt fit in 65535
 static const RfProtocol protocoles[] = {
-    {"remote", { 7500, 8500 }, { 0, 0 }, { 180, 360 }, { 630, 820 }},
+    {"remote", { 7500, 8100 }, { 0, 0 }, { 180, 360 }, { 630, 820 }},
     {"cercle", { 5000, 5500 }, { 0, 0 }, { 200, 400 }, { 500, 700 }},
     {"pir", { 12200, 12700 }, { 0, 0 }, { 300, 650 }, { 1100, 1300 }},
     {"door", { 13500, 14000 }, { 2100, 2300 }, { 400, 1000 }, { 1100, 1400 }},
@@ -36,6 +36,7 @@ class RfReceiver
     public:
         RfReceiver();
         void onInterrupt();
+        void enable(unsigned int pin);
 
     protected:
         void (*_callback)(char * result);

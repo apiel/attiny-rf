@@ -39,6 +39,7 @@ void RfReceiver::_setMainLatch() { // we could easily write unit test there
 }
 
 void RfReceiver::onInterrupt() {
+    // Serial.println("onInterrupt");
     long time = micros();
     unsigned int duration = time - _lastTime;
 
@@ -62,6 +63,17 @@ void RfReceiver::onInterrupt() {
     // if (_currentProtocole > 0) printf(",%d", duration);
     _logTiming(duration);
     _lastTime = time;
+}
+
+void ICACHE_RAM_ATTR handleInterrupt() {
+    rfReceiver.onInterrupt();
+}
+
+void RfReceiver::enable(unsigned int pin) {
+    // Serial.println("enable Interrupt");
+    pinMode(pin, INPUT_PULLUP);
+    // attachInterrupt(pin, [](){ rfReceiver.onInterrupt(); }, CHANGE); // because need ICACHE_RAM_ATTR
+    attachInterrupt(pin, handleInterrupt, CHANGE);
 }
 
 // for the moment we support only one protocole at once
@@ -122,6 +134,7 @@ void RfReceiver::_checkForResult(unsigned int duration) {
             _result[pos++] = '0' + _currentProtocole;
             _result[pos++] = '\0';
             Serial.println(_result);
+            // _available = true;
             _currentProtocole = -1;
         }
     }
