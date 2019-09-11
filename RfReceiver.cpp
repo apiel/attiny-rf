@@ -127,15 +127,26 @@ bool RfReceiver::_isOne(unsigned int duration) {
 }
 
 void RfReceiver::_checkForResult(unsigned int duration) {
+    _available = false;
     if (_currentProtocole > -1 && _timingsPos > 0 && (_timingsPos >= RF_MAX_CHANGES || _isLatch(duration))) {
         int pos = _timingsPos/RF_BIN_SPLIT;
         if (pos > 4) { // at least for char result
             _result[pos++] = '-';
             _result[pos++] = '0' + _currentProtocole;
             _result[pos++] = '\0';
-            Serial.println(_result);
-            // _available = true;
+            // Serial.println(_result);
+            strcpy(_resultFound, _result);
+            _available = true;
             _currentProtocole = -1;
         }
     }
+}
+
+char * RfReceiver::getResult() {
+    _available = false;
+    return _resultFound;
+}
+
+bool RfReceiver::isAvailable() {
+    return _available;
 }

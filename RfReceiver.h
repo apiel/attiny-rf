@@ -37,15 +37,19 @@ class RfReceiver
         RfReceiver();
         void onInterrupt();
         void enable(unsigned int pin);
+        char * getResult();
+        bool isAvailable();
 
     protected:
         void (*_callback)(char * result);
         RfMinMax _mainLatch;
+        bool _available = false;
         int _currentProtocole = -1;
         unsigned int _timingsPos;
         unsigned long _lastTime = 0;
         unsigned int _falseTimingCount = 0;
         char _result[RF_RESULT_SIZE + 2];
+        char _resultFound[RF_RESULT_SIZE + 2];
         void _setMainLatch();
         void _attachInterrupt(int pin);
         void _initCurrentProtocole(unsigned int duration);
