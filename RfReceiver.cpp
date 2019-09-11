@@ -69,11 +69,12 @@ void ICACHE_RAM_ATTR handleInterrupt() {
     rfReceiver.onInterrupt();
 }
 
-void RfReceiver::enable(unsigned int pin) {
+void RfReceiver::enable(unsigned int pin, void (*callback)(char * result)) {
     // Serial.println("enable Interrupt");
     pinMode(pin, INPUT_PULLUP);
     // attachInterrupt(pin, [](){ rfReceiver.onInterrupt(); }, CHANGE); // because need ICACHE_RAM_ATTR
     attachInterrupt(pin, handleInterrupt, CHANGE);
+    _callback = callback;
 }
 
 // for the moment we support only one protocole at once
@@ -127,7 +128,6 @@ bool RfReceiver::_isOne(unsigned int duration) {
 }
 
 void RfReceiver::_checkForResult(unsigned int duration) {
-    _available = false;
     if (_currentProtocole > -1 && _timingsPos > 0 && (_timingsPos >= RF_MAX_CHANGES || _isLatch(duration))) {
         int pos = _timingsPos/RF_BIN_SPLIT;
         if (pos > 4) { // at least for char result
@@ -135,18 +135,8 @@ void RfReceiver::_checkForResult(unsigned int duration) {
             _result[pos++] = '0' + _currentProtocole;
             _result[pos++] = '\0';
             // Serial.println(_result);
-            strcpy(_resultFound, _result);
-            _available = true;
+            _callback(_result);
             _currentProtocole = -1;
         }
     }
-}
-
-char * RfReceiver::getResult() {
-    _available = false;
-    return _resultFound;
-}
-
-bool RfReceiver::isAvailable() {
-    return _available;
 }
